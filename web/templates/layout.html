@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
+    {% block head %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class="container">
+
+      <div class="nav-bar">
+        <div class="logo">
+          <a class="nav-links logo-link" href="/">Musicphreak</a>
+        </div>
+
+        <nav class="top-nav">
+          <ul class="nav-list">
+            <li class="nav-items">
+              <a class="nav-links link-hovers" href="#" alt="Discover">
+                <span>Discover</span>
+              </a>
+            </li>
+
+            <li class="nav-items">
+              <a class="nav-links link-hovers" href="#" alt="Browse">
+                <span>Browse</span>
+              </a>
+            </li>
+
+            <li class="nav-items">
+              <a class="nav-links link-hovers" href="#" alt="My Music">
+                <span>My Music</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="login-item">
+          <ul class="head-sec nav-list">
+            <li class="nav-items">
+              <a class="nav-links login-link" href="#">Login/SignUp</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="inner-container">
+        <div class="search-song">
+          <div class="search-container">
+            <input type="text" placeholder="Search by Song Name" class="search-box">
+            <a class="search-button">Search</a>
+          </div>
+        </div>
+
+        {% block content %}{% endblock %}
+      </div>
+
+    </div>
+  </body>
+</html>

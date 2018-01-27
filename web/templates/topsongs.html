@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Top Songs{% endblock %}
+
+{% block head %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='topsongs-styles.css') }}">
+
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}" ></script>
+{% endblock %}
+
+{% block content %}
+<div class='top-songs'>
+  <h1 class='header'>Top Songs</h1>
+  <ul class='songs-list'>
+
+    {% for song in songs %}
+    <li class ="song" data-mp3="{{song.mp3_links[song.smallest_bitrate].strip()}}">
+      <span class="status-icon"></span>
+      <div class="thumb" style="background-image: url({{song.image_link}})"></div>
+      <div class="tile-contents">
+        <h2 class="song-name">
+          {{song.name}}
+        </h2>
+        <p class="song-artist">
+          {{ song.artist|join(', ')}}
+        </p>
+        <div class="download-links">
+          <span class="download-icon"></span>
+          {% for mp3 in song.mp3_links %}
+          <a download class="download-link" href="{{song.mp3_links[mp3]}}">{{mp3}}kbps</a>
+          {% endfor %}
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+
+  </ul>
+</div>
+{% endblock %}

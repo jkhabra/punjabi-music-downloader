@@ -1,0 +1,79 @@
+* Music Downloader
+
+App to help downloading top Punjabi songs
+
+** Setup
+
+#+BEGIN_SRC bash
+pip install -r ./requirements.txt
+#+END_SRC
+
+* Specs
+
+** Use cases
+
+*** John
+
+John executes the program, and a terminal opens which shows progress of the program. After
+a while terminal stops with "Scraping Finished" message, and John's default browser opens
+with a page which shows all the top Punjabi songs.
+
+John see a nice collage of media images of songs which John can download. John hovers his
+mouse cursor on the image, and a "Play" icon appears. John clicks on the play icon, and the
+song starts playing. Icon changes to pause icon. John dislikes the song, so he clicks on
+pause icon and it stops playing.
+
+John likes another song, and want to download it. So he click on the "Download" icon in
+bottom right corner of song's image, and the song downloads. A "Check" icon appears on the
+song John downloaded.
+
+** Specifications
+
+*** Scraping
+**** RootScraper(start_url)
+
+- =self.soup=
+
+  Initial soup of start url of each scraper
+
+- =make_soup (url :string)=
+
+  Takes a url, and return BeautifulSoup for that Url
+
+- =+=
+
+  Combine two scrapers such that their songs are unique
+
+- =parse ()=
+
+  Should return list of songs after assigning them to ~self.songs~.
+  To be implemented by child scrapers.
+
+**** DjpunjabScraper
+Start URL: http://djpunjab.com/page/top20.html?type=week
+
+**** JattjugadScraper
+Start URL: http://jattjugad.xyz/mu/index.php?tnz=top20songs&cat=Punjabi_SinGle_Track&t=30days
+
+- =parse ()=
+
+  Returns list of songs after assigning them to ~self.songs~
+
+**** MrjattScraper
+Start URL: https://mr-jatt.com/punjabisongs-top20.html
+
+*** Data Cleaning
+
+*** User Interface
+
+**** CLI
+**** Web UI
+
+* TODOS
+** DONE Only show this week's top songs
+CLOSED: [2017-05-22 Mon 12:30]
+When user visit top ranking page:
+
+- Check if rankings for *this* week are present in database
+- If yes, then show those songs in top songs page
+- If no, run ranking_scraper; and repeat

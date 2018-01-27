@@ -1,0 +1,82 @@
+.top-chart {
+  padding: 25px;
+  height: 260px;
+  width: 800px;
+  border-bottom: 1px solid #222;
+}
+
+.header {
+  font-size: 110%;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0 5px 17px;
+  font-weight: 400;
+}
+
+.header-link {
+  color: rgba(255,255,255,.4);
+  line-height: 26px;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  border: 0;
+  text-decoration: none;
+  list-style: none;
+}
+
+.songs-list {
+  height: 175;
+  list-style-type: none;
+  overflow: hidden;
+  max-width: 1030px;
+  margin: 0 auto;
+}
+
+.song {
+  padding: 5px;
+  margin: 5px;
+  position: relative;
+  width: 177px;
+  height: 160px;
+  border: 1px solid #404040;
+  border-radius: 2px;
+  float: left;
+  display: inline-block;
+}
+
+.thumb {
+  content: ".";
+  height: 150px;
+  width: 165px;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.title-contents {
+  position: absolute;
+  padding: 0 0 5px 5px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.65) 75%,rgba(0,0,0,0) 100%);
+  text-shadow: 0 0 5px #000;
+  width: 94%;
+  margin-left: 5px;
+}
+
+.song-name {
+  margin-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 20px;
+}
+
+.song-name, .song-artist {
+  text-overflow: ellipsis;
+  color: rgba(255,255,255,.8);
+  font-weight: 400;
+}
+
+.song-artist {
+  font-size: 14px;
+}
