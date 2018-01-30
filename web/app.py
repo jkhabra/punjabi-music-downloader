@@ -1,5 +1,5 @@
 from os import path
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, json
 from .db import get_db, get_data
 
 app = Flask(__name__)
@@ -39,4 +39,20 @@ def show_topsongs():
 
 @app.route('/api/songs')
 def json_songs():
-    pass
+    data = get_data(get_db(app))
+    songs = []
+    for song in data:
+        print('<<<<<<<<<<<<>>>>>>>>>>>>>>>>>')
+        print(song)
+        print('<<<<<<<<<<<<>>>>>>>>>>>>>>>>>')
+        song_dic = {
+            'Id': song['song_id'],
+            'Name': song['name'],
+            'Artist': song['artist'],
+            'Album': song['album'],
+            'Mp3_link': song['mp3_links'],
+            'Image_link': song['image_link'],
+            'Release_date': song['release_date']
+        }
+        songs.append(song_dic)
+    return json.dumps(songs)

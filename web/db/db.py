@@ -89,7 +89,7 @@ def get_data(db):
 
     rows = cursor.execute(
         """
-        SELECT song.name AS "song_name", artist.name AS "artist_name",
+        SELECT  song.name AS "song_name", artist.name AS "artist_name",
                (SELECT name FROM album
                        WHERE id = song.album_id) AS "album_name",
                song.release_date,
@@ -109,7 +109,7 @@ def get_data(db):
     if not rows:
         rows= cursor.execute(
             """
-             SELECT song.name AS "song_name", artist.name AS "artist_name",
+             SELECT song.name AS "song_name", song.id AS "song_id",  artist.name AS "artist_name",
                (SELECT name FROM album
                        WHERE id = song.album_id) AS "album_name",
                song.release_date,
