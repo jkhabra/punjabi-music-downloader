@@ -56,7 +56,7 @@ class Mp3s(Base):
 class SongArtist(Base):
     __tablename__ = 'song_artist'
     id = Column(Integer, primary_key=True)
-    song_id = Column(Integer, ForeignKey('song.id'))
+    song_id = Column(Integer, ForeignKey('song.id'), nullable=False)
     song = relationship(Song)
     artist_id = Column(Integer, ForeignKey('artist.id'))
     artist = relationship(Artist)
@@ -68,7 +68,7 @@ class SongGenre(Base):
     id = Column(Integer, primary_key=True)
     song_id = Column(Integer, ForeignKey('song.id'))
     song = relationship(Song)
-    genre_id = Column(Integer, ForeignKey('genre.id'))
+    genre_id = Column(Integer, ForeignKey('genre.id'), nullable=False)
     genre = relationship(Genre)
     created_at = Column(DATETIME, default=datetime.datetime.utcnow)
     update_at = Column(DATETIME, default=datetime.datetime.utcnow)

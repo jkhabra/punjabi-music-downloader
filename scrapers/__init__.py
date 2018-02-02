@@ -102,23 +102,18 @@ def save_song_to_db(song):
                 album_name = None
 
         for artist in (artists or [{'name': None, type: None}]):
-            if db_session.query(Artist).filter(and_(Artist.name != artist['name'], Artist.type != artist['type'])).all():
+            if not db_session.query(Artist).filter(and_(Artist.name == artist['name'], Artist.type == artist['type'])).all():
                 new_artist = Artist(name=artist['name'],type=artist['type'])
                 db_session.add(new_artist)
             else:
-                new_artist = db_session.query(Artist).filter(Artist.name == artist['name']).one()
-        print(new_artist.id)
+                new_artist = db_session.query(Artist).filter_by(and_(name == artist['name'], type == 'singer')).one()
+
         if db_session.query(Song).filter(Song.name != song_name).all:
             if album_name is not None:
                 new_song = Song(name=song_name, poster_img_url=poster_url,album_id=new_album.id, lyrics=lyrics,youtube_id=youtube_id,release_date=release_date)
             else:
                 new_song = Song(name=song_name, poster_img_url=poster_url,lyrics=lyrics,youtube_id=youtube_id,release_date=release_date)
             db_session.add(new_song)
-
-        if db_session.query(SongArtist).filter(and_(SongArtist.song_id !=new_song.id, SongArtist.artist_id != new_artist.id)).all():
-            print('in here up\\\\')
-            new_song_artist = SongArtist(artist_id=new_artist.id, song_id=new_song.id)
-            db_session.add(new_song_artist)
 
         if genres:
             for genre in genres:
@@ -128,14 +123,18 @@ def save_song_to_db(song):
                 else:
                     new_g= db_session.query(Genre).filter(Genre.name == genre).one()
 
-        if db_session.query(SongGenre).filter(and_(SongGenre.song_id!=new_song.id, SongGenre.genre_id!=new_g.id)):
-            new_song_genre = SongGenre(song_id=new_song.id, genre_id=new_g.id)
-            db_session.add(new_song_genre)
+                if not db_session.query(SongGenre).filter(and_(SongGenre.song_id==new_song.id, SongGenre.genre_id==new_g.id)).all():
+                    new_song_genre = SongGenre(song_id=new_song.id, genre_id=new_g.id)
+                    db_session.add(new_song_genre)
+
+        if db_session.query(SongArtist).filter(and_(SongArtist.song_id!=new_song.id, SongArtist.artist_id!=new_artist.id)):
+            new_song_artist = SongArtist(song_id=new_song.id, artist_id=new_artist.id)
+            db_session.add(new_song_artist)
 
         if len(mp3_links) != 0:
             for quality in mp3_links:
                 url = mp3_links.get(quality)
-                if db_session.query(Mp3s).filter(Mp3s.url != url):
+                if not db_session.query(Mp3s).filter(Mp3s.url == url).all():
                     new_mp3s = Mp3s(song_id=new_song.id,source=source,url=url,quality=quality)
                     db_session.add(new_mp3s)
                     db_session.commit()

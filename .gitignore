@@ -4,3 +4,6 @@ data/*.json
 .idea
 /.fuse_hidden000000f200000005
 *.egg-info
+*.DS_Store
+MANIFEST.in
+Procfile
