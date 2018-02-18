@@ -14,7 +14,7 @@
   <ul class='songs-list'>
 
     {% for song in songs %}
-    <li class ="song" data-mp3="{{song['links']}}">
+    <li class ="song" data-mp3="{{song['links']['48']}}">
       <span class="status-icon"></span>
       <div class="thumb" style="background-image: url({{song['poster']}})"></div>
       <div class="tile-contents">
@@ -26,8 +26,8 @@
         </p>
         <div class="download-links">
           <span class="download-icon"></span>
-          {% for mp3 in song['links'] %} 
-          <a download class="download-link" href="{{[mp3]}}">{{song['quality']}}kbps</a>
+          {% for mp3 in song['links'] %}
+          <a download class="download-link" href="{{song['links'][mp3]}}">{{mp3}}kbps</a>
           {% endfor %}
         </div>
       </div>

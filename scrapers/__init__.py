@@ -106,7 +106,9 @@ def save_song_to_db(song):
                 new_artist = Artist(name=artist['name'],type=artist['type'])
                 db_session.add(new_artist)
             else:
-                new_artist = db_session.query(Artist).filter_by(and_(name == artist['name'], type == 'singer')).one()
+                art = db_session.query(Artist).filter(and_(Artist.name == artist['name'],Artist.type == 'singer')).all()
+                for i in art:
+                    new_artist = i
 
         if db_session.query(Song).filter(Song.name != song_name).all:
             if album_name is not None:

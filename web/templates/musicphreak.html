@@ -15,13 +15,13 @@
   <div class="inner-chart">
     <ul class="songs-list">
       {% for song in songs %}
-      <li class="song" data-mp3="{{song.mp3_links[song.smallest_bitrate].strip()}}">
+      <li class="song" data-mp3="{{song.Mp3s.url}}">
         <a href="top-songs">
-          <div class="thumb" style="background-image: url({{song.image_link}})"></div>
+          <div class="thumb" style="background-image: url({{song.Song.poster_img_url}})"></div>
         </a>
         <div class="title-contents">
           <h2 class="song-name">
-            {{song.name}}
+            {{song.Song.name}}
           </h2>
           <p class="song-artist">
             {{song.artist|join(',')}}
