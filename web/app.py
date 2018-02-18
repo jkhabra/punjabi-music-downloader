@@ -2,7 +2,8 @@ from os import path
 from flask import Flask, render_template, g, json, request, Response
 from db import get_session
 from models import Album, Song, Artist, SongArtist, Mp3s, Genre, SongGenre, SongRanking
-from sqlalchemy import and_, func
+from sqlalchemy import and_
+
 
 app = Flask(__name__)
 
@@ -20,13 +21,10 @@ def show_topsongs():
     song = db_session.query(SongArtist, Song, Artist, Mp3s).join(Song, Artist).limit(20).all()
 
     for a in song:
-        link={a.Mp3s.quality: a.Mp3s.url}
-        for i in sorted(link):
-            mp3_links[i] = link.get(i)
+        mp3_links[a.Mp3s.quality] = a.Mp3s.url
         s_name = a.Song.name
         a_name = a.Artist.name
         poster = a.Song.poster_img_url
-        u = min(mp3_links.keys())
         data.append({
             's_name':s_name,
             'a_name':a_name,
@@ -56,12 +54,16 @@ def json_songs(song_id):
     else:
         query = query.slice(skip, limit).limit(limit)
 
-
     data = query.all()
 
     for song in data:
+        link = db_session.query(Mp3s).filter(song.Song.id==Mp3s.song_id).all()
+        for m in link:
+            mp3_links[m.quality] = m.url
+
         artist = {'id': song.Artist.id, 'name': song.Artist.name}
         song_dic = {
+            'url': mp3_links,
             'songId': song.Song.id,
             'name': song.Song.name,
             'thumb': song.Song.poster_img_url,
@@ -91,9 +93,13 @@ def json_artist(artist_id):
             'artistId': i.SongArtist.artist_id,
             'artistName': i.Artist.name
         }
+
         if artist_song['artistId'] == artist_id:
             artist = artist_song
+
         if artist_id is None:
             artist.append(artist_song)
+
     db_session.close()
+
     return Response(json.dumps(artist), mimetype='application/json')
