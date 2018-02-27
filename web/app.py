@@ -85,21 +85,70 @@ def json_songs(song_id):
 @app.route('/api/artists/<int:artist_id>')
 def json_artist(artist_id):
     db_session = get_session()
+    skip = int(request.args.get('skip', 0))
+    limit = int(request.args.get('limit', 30))
+    total = db_session.query(Artist).count()
     artist = []
-    data = db_session.query(SongArtist, Song, Artist).join(Song, Artist).all()
+    query = db_session.query(Artist)
 
-    for i in data:
+    if artist_id:
+        query = query.filter(Artist.id == artist_id)
+    else:
+        query = query.slice(skip,limit).limit(limit)
+
+    db_data = query.all()
+    for i in db_data:
         artist_song = {
-            'artistId': i.SongArtist.artist_id,
-            'artistName': i.Artist.name
+            'artistId': i.id,
+            'artistName': i.name,
         }
 
-        if artist_song['artistId'] == artist_id:
-            artist = artist_song
+        artist.append(artist_song)
 
-        if artist_id is None:
-            artist.append(artist_song)
+    data = {'total': total,
+         'data': artist}
 
     db_session.close()
 
-    return Response(json.dumps(artist), mimetype='application/json')
+    return Response(json.dumps(data), mimetype='application/json')
+
+@app.route('/api/artists/<int:artist_id>')
+@app.route('/api/artists/<int:artist_id>/songs')
+def json_artist_song(artist_id):
+    db_session = get_session()
+    skip = int(request.args.get('skip',0))
+    limit = int(request.args.get('limit', 10))
+    mp3_links = {}
+    artist_id = db_session.query(Artist).filter(Artist.id == artist_id).one()
+    artist = {'id': artist_id.id, 'name': artist_id.name}
+    s = [artist]
+    get_songs = db_session.query(SongArtist)\
+                          .filter(SongArtist.artist_id == artist_id.id)\
+                          .slice(skip,limit).limit(limit).all()
+    total= db_session.query(SongArtist).filter(SongArtist.artist_id == artist_id.id).count()
+
+    for i in get_songs:
+        data = db_session.query(Song).filter(Song.id == i.song_id).all()
+        for song in data:
+            link = db_session.query(Mp3s).filter(song.id==Mp3s.song_id).all()
+
+        for m in link:
+            mp3_links[m.quality] = m.url
+
+        song_dic = {
+            'url': mp3_links,
+            'songId': song.id,
+            'name': song.name,
+            'thumb': song.poster_img_url,
+            'releaseDate': song.release_date,
+            'albumId': song.album_id
+        }
+
+        s.append(song_dic)
+
+    data = {'total': total,
+            'data': s}
+
+    db_session.close()
+    return Response(json.dumps(data), mimetype='application/json')
+
