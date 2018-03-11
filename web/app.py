@@ -3,10 +3,10 @@ from flask import Flask, render_template, g, json, request, Response
 from db import get_session
 from models import Album, Song, Artist, SongArtist, Mp3s, Genre, SongGenre, SongRanking
 from sqlalchemy import and_
-
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # Load default config and override config from an environment variable
 app.config.update(dict(
     DATABASE=path.join(path.dirname(app.root_path), 'musicphreak.db')

@@ -5,3 +5,4 @@ Jinja2==2.9.5
 Flask==0.12
 wget==3.2
 Flask-Script==2.0.5
+Flask-Cors==3.0.3
