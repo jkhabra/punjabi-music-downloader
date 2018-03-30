@@ -43,7 +43,6 @@ def json_songs(song_id):
     limit = int(request.args.get('limit', 30))
     total = db_session.query(Song).count()
     songs = []
-    mp3_links = {}
 
     query = db_session \
             .query(SongArtist, Song, Artist) \
@@ -56,14 +55,18 @@ def json_songs(song_id):
 
     data = query.all()
 
-    for song in data:
-        link = db_session.query(Mp3s).filter(song.Song.id==Mp3s.song_id).all()
+    def mp3_urls(song_id):
+        mp3_links = {}
+        link = db_session.query(Mp3s).filter(song_id==Mp3s.song_id).all()
+
         for m in link:
             mp3_links[m.quality] = m.url
+        return mp3_links
 
+    for song in data:
         artist = {'id': song.Artist.id, 'name': song.Artist.name}
         song_dic = {
-            'url': mp3_links,
+            'url': mp3_urls(song.Song.id),
             'songId': song.Song.id,
             'name': song.Song.name,
             'thumb': song.Song.poster_img_url,
